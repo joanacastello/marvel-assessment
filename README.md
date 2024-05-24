@@ -18,10 +18,12 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 In order to make the app work properly, you will need to create a folder under the /src folder called environments. Inside this, create a file called environment.ts with your Marvel API key. 
 
+```
   export const environment = {
   	production: false,
   	publicApiKey: [Your marvel API key]
 	};
+```
 
 ## Running unit tests
 
