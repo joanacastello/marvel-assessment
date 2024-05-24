@@ -1,27 +1,39 @@
 <div class="w-full flex flex-col items-center">
-  <div class="w-3/4 md:w-2/5 2xl:w-4/12 my-4">
-    <div class="relative mt-2 rounded-md shadow-sm">
-      <input 
-        type="text" placeholder="Search"
+  <div class="flex justify-center w-full">
+    <div class="w-3/4 md:w-2/5 2xl:w-4/12 my-4">
+      <div class="relative mt-2 rounded-md shadow-sm">
+        <input
+        type="text" placeholder="Search by name, comic or event" #searchInput (keyup)="searchCharacters(searchInput.value)"
         class="block w-full rounded-md border-0 py-1.5 pl-4 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-        <span><img src="../assets/icons/search.svg" width="20" height="21" alt="search-icon" class="border-red" /></span>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+          <span><img src="../assets/icons/search.svg" width="20" height="21" alt="search-icon" class="border-red" /></span>
+        </div>
       </div>
     </div>
   </div>
-  <div
-    infiniteScroll 
-    [infiniteScrollDistance]="2"
-    (scrolled)="onScroll()"
-    class="mx-10 my-2 gap-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-    <a *ngFor="let character of characters" class="flex flex-col border border-black rounded-lg"
-      routerLink="/character/{{character.id}}">
-      <img [src]="character.thumbnail.path+'/standard_fantastic.' + character.thumbnail.extension" alt={{character}}>
-      <h1>{{character.name}}</h1>
+  <div infiniteScroll [infiniteScrollDistance]="2" (scrolled)="onScroll()"
+    class="mx-10 my-2 gap-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+    <a routerLink="/character/{{character.id}}"
+      *ngFor="let character of characters" 
+      class="flex flex-col"
+      >
+      <div class="flex">
+        <img [src]="character.thumbnail.path+'/standard_fantastic.' + character.thumbnail.extension" alt={{character}}
+        class="object-cover h-full w-full hover:scale-110 duration-300 cursor-pointer overflow-hidden">
+      </div>
+      <div class="h-28 bg-black">
+        <h1 class="text-lg bold text-white uppercase font-mono p-2">{{character.name}}</h1>
+      </div>
     </a>
   </div>
   <div *ngIf="isLoading" class="text-xl">
     Loading...
+  </div>
+  <div *ngIf="serverEror" class="text-xl">
+    There was a server error. Please try again.
+  </div>
+  <div *ngIf="noCharacters" class="text-xl">
+    No characters found. Please try to search something else.
   </div>
 
 </div>

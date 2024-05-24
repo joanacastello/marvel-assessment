@@ -4,8 +4,8 @@ import { CharacterDetailComponent } from './components/character-detail/characte
 import { CharacterGridComponent } from './components/character-grid/character-grid.component';
 
 const routes: Routes = [
-  { path: 'home', title: 'Home', component: CharacterGridComponent },
-  { path: 'character/:id', title: 'Character page', component: CharacterDetailComponent },
+  { path: 'home', title: 'Marvel Characters / Home', component: CharacterGridComponent },
+  { path: 'character/:id', title: 'Marvel Characters / Detail', component: CharacterDetailComponent },
   { path: '',  title: 'Home', component: CharacterGridComponent }
 ];
 

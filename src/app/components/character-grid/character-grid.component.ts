@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Character } from 'src/models/character';
 import { CharacterServiceService } from 'src/services/character-service.service';
 
@@ -9,43 +9,52 @@ import { CharacterServiceService } from 'src/services/character-service.service'
 })
 export class CharacterGridComponent implements OnInit {
 
-  ITEMS_PER_PAGE: number = 12; // MCM of the different column numbers we can have on the UI depending on the size of the screen
+  @ViewChild('searchInput') searchInput: ElementRef;
+
+  ITEMS_PER_PAGE: number = 60; // MCM of the different column numbers we can have on the UI depending on the size of the screen
 
   characters: Character[] = [];
-  isLoading = false;
   currentPage: number = 0;
+  
+  isLoading: boolean = false;
+  noCharacters: boolean = false;
+  serverEror: boolean = false;
 
   constructor(
     private characterService: CharacterServiceService
   ) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadCharacters();
   }
 
-  loadData() {
+  loadCharacters() {
     this.isLoading = true;
-    this.characterService.getCharacters().subscribe({
+    this.characterService.getCharacters(this.ITEMS_PER_PAGE, this.ITEMS_PER_PAGE * this.currentPage).subscribe({
       next: characters => {
-        this.characters = characters;
+        this.characters = [...this.characters, ...characters];
         this.isLoading = false;
       },
-      error: error => {
-        console.log(error);
+      error: () => {
+        this.serverEror = true;
       }
     });
   }
 
   appendData() {
-    this.characterService.getCharacters(this.ITEMS_PER_PAGE * this.currentPage).subscribe({
-      next: characters => {
-        this.characters = [...this.characters, ...characters];
-        this.isLoading = false;
-      },
-      error: error => {
-        console.log(error);
-      }
-    });
+    if (!this.searchInput.nativeElement.value) {
+      this.characterService.getCharacters(this.ITEMS_PER_PAGE, this.ITEMS_PER_PAGE * this.currentPage).subscribe({
+        next: characters => {
+          this.characters = [...this.characters, ...characters];
+          this.isLoading = false;
+        },
+        error: () => {
+          this.serverEror = true;
+        }
+      });
+    } else {
+      this.searchCharacters(this.searchInput.nativeElement.value);
+    }
   }
 
   onScroll= ()=>{
@@ -53,5 +62,52 @@ export class CharacterGridComponent implements OnInit {
     this.currentPage++;
     this.appendData();
    }
+
+  searchCharacters(prompt: string) {
+    if (prompt.length > 2) {
+      this.isLoading = true;
+      this.characters = [];
+      this.resetErrors();
+      this.characterService.searchCharactersByName(prompt, this.ITEMS_PER_PAGE, this.ITEMS_PER_PAGE * this.currentPage).subscribe({
+        next: characters => {
+          this.characters = [...this.characters, ...characters];
+          this.isLoading = false;
+        },
+        error: () => {
+          this.serverEror = true;
+        }
+      });
+      this.characterService.searchCharactersByComicName(prompt, this.ITEMS_PER_PAGE, this.ITEMS_PER_PAGE * this.currentPage).subscribe({
+        next: characters => {
+          this.characters = [...this.characters, ...characters];
+          this.isLoading = false;
+        },
+        error: () => {}
+      });
+      this.characterService.searchCharactersByEventName(prompt, this.ITEMS_PER_PAGE, this.ITEMS_PER_PAGE * this.currentPage).subscribe({
+        next: characters => {
+          this.characters = [...this.characters, ...characters];
+          this.isLoading = false;
+        },
+        error: () => {}
+      });
+      if (this.characters.length == 0) {
+        this.noCharacters = true;
+      }
+    } else  {
+      this.resetSearch();
+    }
+  }
+
+  resetSearch() {
+    this.characters = [];
+    this.currentPage = 0;
+    this.loadCharacters();
+  }
+
+  resetErrors() {
+    this.serverEror = false;
+    this.noCharacters = false;
+  }
 
 }

@@ -8,6 +8,7 @@ export const environment = {
   privateApiKey: '261630de3676725885dc4b0e02652f4f56532cc6'
 };
 
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

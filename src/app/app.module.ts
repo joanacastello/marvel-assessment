@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { CharacterGridComponent } from './components/character-grid/character-grid.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CharacterDetailComponent } from './components/character-detail/character-detail.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { CharacterDetailComponent } from './components/character-detail/characte
     CharacterDetailComponent,
     HeaderComponent,
     CharacterDetailComponent,
+    FooterComponent,
   ],
   imports: [
     AppRoutingModule,

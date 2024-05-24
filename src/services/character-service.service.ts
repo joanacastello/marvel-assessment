@@ -4,15 +4,9 @@ import { Observable, map } from 'rxjs';
 import { Character } from 'src/models/character';
 import { environment } from 'src/environments/environment';
 
-interface characterListWrapper {
+interface responseWrapper {
   data: {
     results: Character[]
-  }
-}
-
-interface characterDataWrapper {
-  data: {
-    results: Character
   }
 }
 
@@ -28,14 +22,14 @@ export class CharacterServiceService {
     private http: HttpClient
   ) { } 
 
-  getCharacters(offset?: number): Observable<Character[]> {
+  getCharacters(limit: number, offset?: number): Observable<Character[]> {
     if (this.apiKey) {
       const options = { params: new HttpParams()
         .set('apikey', this.apiKey)
-        .set('limit', 60)
+        .set('limit', limit)
         .set('offset', offset ?? 0)
       };
-      return this.http.get<characterListWrapper>(`${this.baseUrl}/characters`, options).pipe(
+      return this.http.get<responseWrapper>(`${this.baseUrl}/characters`, options).pipe(
         map(res => res.data.results)
       );
     } else {
@@ -48,7 +42,55 @@ export class CharacterServiceService {
       const options = { params: new HttpParams()
         .set('apikey', this.apiKey)
       };
-      return this.http.get<characterDataWrapper>(`${this.baseUrl}/characters/${characterId}`, options).pipe(
+      return this.http.get<responseWrapper>(`${this.baseUrl}/characters/${characterId}`, options).pipe(
+        map(res => res.data.results[0])
+      );
+    } else {
+      throw new Error('Public API key is not defined in environment variables');
+    }
+  }
+
+  searchCharactersByName(name: string, limit: number, offset?: number) {
+    if (this.apiKey) {
+      const options = { params: new HttpParams()
+        .set('apikey', this.apiKey)
+        .set('nameStartsWith', name)
+        .set('limit', limit)
+        .set('offset', offset ?? 0)
+      };
+      return this.http.get<responseWrapper>(`${this.baseUrl}/characters`, options).pipe(
+        map(res => res.data.results)
+      );
+    } else {
+      throw new Error('Public API key is not defined in environment variables');
+    }
+  }
+
+  searchCharactersByComicName(name: string, limit: number, offset?: number) {
+    if (this.apiKey) {
+      const options = { params: new HttpParams()
+        .set('apikey', this.apiKey)
+        .set('comics', name)
+        .set('limit', limit)
+        .set('offset', offset ?? 0)
+      };
+      return this.http.get<responseWrapper>(`${this.baseUrl}/characters`, options).pipe(
+        map(res => res.data.results)
+      );
+    } else {
+      throw new Error('Public API key is not defined in environment variables');
+    }
+  }
+
+  searchCharactersByEventName(name: string, limit: number, offset?: number) {
+    if (this.apiKey) {
+      const options = { params: new HttpParams()
+        .set('apikey', this.apiKey)
+        .set('events', name)
+        .set('limit', limit)
+        .set('offset', offset ?? 0)
+      };
+      return this.http.get<responseWrapper>(`${this.baseUrl}/characters`, options).pipe(
         map(res => res.data.results)
       );
     } else {

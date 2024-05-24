@@ -24,8 +24,8 @@ export class CharacterDetailComponent implements OnInit {
     this.isLoading = true;
     if (this.characterId) {
       this.characterService.getCharacterData(this.characterId).subscribe({
-        next: characters => {
-          this.character = characters;
+        next: character => {
+          this.character = character;
           this.isLoading = false;
         },
         error: error => {
