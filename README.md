@@ -2,6 +2,17 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.1.
 
+## Project set up
+
+In order to make the app work properly, you will need to create a folder under the /src folder called environments. Inside this, create a file called environment.ts with your Marvel API key. 
+
+```
+export const environment = {
+  production: false,
+  publicApiKey: [Your Marvel API key]
+};
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
@@ -14,16 +25,6 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Project set up
-
-In order to make the app work properly, you will need to create a folder under the /src folder called environments. Inside this, create a file called environment.ts with your Marvel API key. 
-
-```
-  export const environment = {
-  	production: false,
-  	publicApiKey: [Your marvel API key]
-	};
-```
 
 ## Running unit tests
 
