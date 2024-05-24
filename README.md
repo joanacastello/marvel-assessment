@@ -14,6 +14,15 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+## Project set up
+
+In order to make the app work properly, you will need to create a folder under the /src folder called environments. Inside this, create a file called environment.ts with your Marvel API key. 
+
+  export const environment = {
+  	production: false,
+  	publicApiKey: [Your marvel API key]
+	};
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
